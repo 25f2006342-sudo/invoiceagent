@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: invoice-action-agent
+    runtime: docker
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: A2A_BASE_URL
+        sync: false
+      - key: A2A_BEARER_TOKENS
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: AI_MODEL
+        value: gpt-4o-mini
+      - key: DATABASE_PATH
+        value: /var/data/invoice_agent.sqlite3
+    disk:
+      name: invoice-agent-data
+      mountPath: /var/data
+      sizeGB: 1
