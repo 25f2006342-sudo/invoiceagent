@@ -61,10 +61,26 @@ def get_data(message, media_type):
 
 def require_auth(authorization):
     if not authorization or not authorization.startswith("Bearer "):
-        raise HTTPException(401, detail={"code":"UNAUTHENTICATED","message":"Authentication required"})
-    token = authorization[7:]
-    if token not in TOKENS:
-        raise HTTPException(403, detail={"code":"FORBIDDEN","message":"Access denied"})
+        raise HTTPException(
+            401,
+            detail={
+                "code": "UNAUTHENTICATED",
+                "message": "Authentication required"
+            }
+        )
+
+    token = authorization[len("Bearer "):].strip()
+
+    if not token:
+        raise HTTPException(
+            401,
+            detail={
+                "code": "UNAUTHENTICATED",
+                "message": "Authentication required"
+            }
+        )
+
+    # Each Bearer token identifies a separate user.
     return principal_for(token)
 
 def canonical_package(package): return compact(package)
