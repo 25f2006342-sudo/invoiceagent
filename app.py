@@ -70,7 +70,6 @@ def require_auth(authorization):
         )
 
     token = authorization[len("Bearer "):].strip()
-
     if not token:
         raise HTTPException(
             401,
@@ -79,6 +78,8 @@ def require_auth(authorization):
                 "message": "Authentication required"
             }
         )
+
+    return principal_for(token)
 
     # Each Bearer token identifies a separate user.
     return principal_for(token)
